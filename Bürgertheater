@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Cage Partitur – Letzte Runde</title>
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #1a1a1a;
+    --border: #2e2e2e;
+    --accent: #c8a96e;
+    --text: #e8e0d4;
+    --text-dim: #6a6460;
+    --text-mid: #a09890;
+    --danger: #c84b4b;
+    --radius: 6px;
+    --mono: 'Courier New', Courier, monospace;
+    --serif: Georgia, 'Times New Roman', serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  header span {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  nav {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  nav button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 11px 6px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+  .view.active { display: flex; }
+  .view.scrollable { overflow-y: auto; }
+
+  #timer-view { align-items: center; justify-content: space-between; }
+
+  .interval-info { width: 100%; padding: 20px 24px 0; text-align: center; }
+  .interval-number {
+    font-family: var(--serif);
+    font-size: 72px;
+    line-height: 1;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .interval-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
