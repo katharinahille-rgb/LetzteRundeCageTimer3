@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Cage Partitur – Letzte Runde</title>
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #1a1a1a;
+    --border: #2e2e2e;
+    --accent: #c8a96e;
+    --text: #e8e0d4;
+    --text-dim: #6a6460;
+    --text-mid: #a09890;
+    --danger: #c84b4b;
+    --radius: 6px;
+    --mono: 'Courier New', Courier, monospace;
+    --serif: Georgia, 'Times New Roman', serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  header span {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  nav {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  nav button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 11px 6px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+  .view.active { display: flex; }
+  .view.scrollable { overflow-y: auto; }
+
+  #timer-view { align-items: center; justify-content: space-between; }
+
+  .interval-info { width: 100%; padding: 20px 24px 0; text-align: center; }
+  .interval-number {
+    font-family: var(--serif);
+    font-size: 72px;
+    line-height: 1;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .interval-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .time-display { text-align: center; padding: 24px 0 16px; }
+  .time-big {
+    font-family: var(--mono);
+    font-size: 80px;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .time-big.warning { color: var(--danger); }
+  .time-big.normal  { color: var(--text); }
+
+  .progress-track {
+    width: calc(100% - 48px);
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0 24px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.5s linear, background 0.3s;
+  }
+  .progress-fill.warning { background: var(--danger); }
+
+  .next-info {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 10px 24px 0;
+    letter-spacing: 0.03em;
+  }
+  .next-info strong { color: var(--text-mid); }
+
+  .total-bar {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    letter-spacing: 0.06em;
+    padding: 0 24px 8px;
+  }
+
+  .controls { display: flex; gap: 12px; padding: 24px; width: 100%; }
+  .btn {
+    flex: 1;
+    padding: 16px 12px;
+    border-radius: var(--radius);
+    border: none;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary  { background: var(--accent); color: #0e0e0e; font-weight: 700; flex: 2; }
+  .btn-secondary { background: var(--surface); color: var(--text-mid); border: 1px solid var(--border); }
+
+  .nav-row { display: flex; gap: 12px; padding: 0 24px 24px; width: 100%; }
+  .btn-nav {
+    flex: 1;
+    padding: 13px 8px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-mid);
+    font-family: var(--mono);
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-nav:active  { transform: scale(0.95); background: var(--border); }
+  .btn-nav:disabled { opacity: 0.25; cursor: default; }
+
+  .edit-header {
+    padding: 14px 16px 10px;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .edit-header-right { display: flex; gap: 12px; align-items: center; }
+  .edit-header-total { font-size: 11px; color: var(--text-mid); }
+
+  .reset-link {
+    background: none; border: none;
+    font-family: var(--mono);
+    font-size: 10px; color: var(--text-dim);
+    cursor: pointer; letter-spacing: 0.06em;
+    text-decoration: underline;
+  }
+
+  .edit-list {
+    padding: 12px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .edit-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+  }
+  .edit-num {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--accent);
+    width: 56px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .edit-sep  { color: var(--border); flex-shrink: 0; font-size: 18px; }
+  .edit-label { font-size: 10px; color: var(--text-dim); letter-spacing: 0.06em; flex-shrink: 0; width: 26px; }
+  .edit-input {
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 16px;
+    width: 52px;
+    text-align: center;
+    padding: 2px 4px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .edit-input:focus { border-bottom-color: var(--accent); color: var(--accent); }
+  .edit-input[type=number] { -moz-appearance: textfield; }
+  .edit-input::-webkit-inner-spin-button,
+  .edit-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .edit-colon { color: var(--text-dim); font-size: 18px; flex-shrink: 0; margin: 0 -4px; }
+  .edit-note  { font-size: 10px; color: var(--text-dim); margin-left: auto; font-style: italic; }
+
+  .save-bar { padding: 12px 16px 40px; flex-shrink: 0; }
+
+  #finish-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(14,14,14,0.95);
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px;
+  }
+  #finish-overlay.visible { display: flex; }
+  #finish-overlay h2 {
+    font-family: var(--serif);
+    font-size: 32px; color: var(--accent); margin-bottom: 12px;
+  }
+  #finish-overlay p {
+    color: var(--text-dim); font-size: 12px;
+    letter-spacing: 0.06em; margin-bottom: 32px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: var(--accent); color: #0e0e0e;
+    font-size: 11px; letter-spacing: 0.08em;
+    padding: 10px 20px; border-radius: 20px;
+    font-weight: 700;
+    transition: transform 0.3s;
+    z-index: 200; white-space: nowrap;
+  }
+  .toast.visible { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Letzte Runde</h1>
+  <span>Cage Partitur</span>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('timer')">Timer</button>
+  <button onclick="showTab('edit')">Intervalle</button>
+  <button onclick="showTab('defaults')">Standardwerte</button>
+</nav>
+
+<div id="timer-view" class="view active">
+  <div class="interval-info">
+    <div class="interval-number" id="cur-num">15</div>
+    <div class="interval-label">Intervall</div>
+  </div>
+  <div class="time-display">
+    <div class="time-big normal" id="time-display">1:10</div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill" style="width:100%"></div>
+  </div>
+  <div class="next-info" id="next-info"></div>
+  <div class="total-bar" id="total-bar"></div>
+  <div class="controls">
+    <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
+    <button class="btn btn-primary" id="play-btn" onclick="togglePlay()">Start</button>
+  </div>
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-prev" onclick="prevInterval()" disabled>&#8592;</button>
+    <button class="btn-nav" id="btn-next" onclick="nextInterval()">&#8594;</button>
+  </div>
+</div>
+
+<div id="edit-view" class="view scrollable">
+  <div class="edit-header">
+    <span>Intervalle (mm:ss)</span>
+    <div class="edit-header-right">
+      <button class="reset-link" onclick="resetToDefault()">Zurücksetzen</button>
+      <span class="edit-header-total" id="edit-total">—</span>
+    </div>
+  </div>
+  <div class="edit-list" id="edit-list"></div>
+</div>
+
+<div id="defaults-view" class="view scrollable">
+  <div class="edit-header">
+    <span>Standardwerte bearbeiten</span>
+    <span class="edit-header-total" id="defaults-total">—</span>
+  </div>
+  <div class="edit-list" id="defaults-list"></div>
+  <div class="save-bar">
+    <button class="btn btn-primary" style="width:100%;" onclick="saveDefaults()">Als Standardwerte speichern</button>
+  </div>
+</div>
+
+<div id="finish-overlay">
+  <h2>Letzte Runde.</h2>
+  <p>Die Cage-Performance ist beendet.</p>
+  <button class="btn btn-primary" style="max-width:200px;" onclick="resetAll()">Neu starten</button>
+</div>
+
+<div class="toast" id="toast">Standardwerte gespeichert</div>
+
+<script>
+var FACTORY = [70,70,70,70,70,70,80,70,90,99,70,60,50,50,0,270,210];
+var NOTES   = ['','','','','','','','','','Musik-Cue','','','','','Abschluss','Ich hab noch nie I','Ich hab noch nie II'];
+var LABELS  = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'IhnI','IhnII'];
+var COUNT   = FACTORY.length;
+
+function lsGet(key, fallback) {
+  try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+  catch(e) { return fallback; }
+}
+function lsSet(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
+
+var userDefaults = lsGet('cage_defaults', FACTORY.slice());
+var intervals    = lsGet('cage_intervals', userDefaults.slice());
+
+var current   = 0;
+var remaining = intervals[0];
+var running   = false;
+var ticker    = null;
+
+function lbl(i) { return LABELS[i] || String(15 - i); }
+function fmt(s) {
+  if (s <= 0) return '0:00';
+  return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0');
+}
+function sum(arr) { return arr.reduce(function(a,b){return a+b;},0); }
+
+function updateTimerUI() {
+  document.getElementById('cur-num').textContent = lbl(current);
+  var dur    = intervals[current];
+  var timeEl = document.getElementById('time-display');
+  var prog   = document.getElementById('progress-fill');
+
+  if (dur === 0) {
+    timeEl.textContent = '—';
+    timeEl.className = 'time-big normal';
+    prog.style.width = '100%';
+    prog.className = 'progress-fill';
+  } else {
+    timeEl.textContent = fmt(remaining);
+    prog.style.width = (remaining/dur*100) + '%';
+    var warn = remaining <= 10 && remaining > 0;
+    timeEl.className = 'time-big ' + (warn ? 'warning' : 'normal');
+    prog.className   = 'progress-fill' + (warn ? ' warning' : '');
+  }
+
+  var nextEl = document.getElementById('next-info');
+  if (current < COUNT - 1) {
+    var nd = intervals[current+1];
+    nextEl.innerHTML = nd === 0
+      ? 'Weiter: ' + lbl(current+1) + ' &mdash; <strong>Abschluss</strong>'
+      : 'Weiter: ' + lbl(current+1) + ' &mdash; <strong>' + fmt(nd) + '</strong>';
+  } else {
+    nextEl.textContent = 'Letztes Intervall';
+  }
+
+  document.getElementById('total-bar').textContent =
+    'Gesamt: ' + fmt(sum(intervals)) + '  |  ' + current + ' von ' + COUNT + ' abgeschlossen';
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').disabled = current === COUNT - 1;
+  document.getElementById('play-btn').textContent = running ? 'Pause' : 'Start';
+}
+
+function startTick() {
+  if (ticker) clearInterval(ticker);
+  ticker = setInterval(function() {
+    if (intervals[current] === 0) { advanceOrFinish(); return; }
+    remaining--;
+    if (remaining <= 0) { remaining = 0; updateTimerUI(); pause(); advanceOrFinish(); }
+    else updateTimerUI();
+  }, 1000);
+}
+
+function advanceOrFinish() {
+  if (current < COUNT - 1) {
+    current++; remaining = intervals[current]; updateTimerUI();
+    if (intervals[current] === 0) { pause(); return; }
+    if (running) startTick();
+  } else {
+    pause();
+    document.getElementById('finish-overlay').classList.add('visible');
+  }
+}
+
+function togglePlay() { running ? pause() : play(); }
+function play() {
+  if (intervals[current] === 0) return;
+  running = true; startTick(); updateTimerUI();
+}
+function pause() {
+  running = false;
+  if (ticker) { clearInterval(ticker); ticker = null; }
+  updateTimerUI();
+}
+function resetTimer()    { pause(); remaining = intervals[current]; updateTimerUI(); }
+function prevInterval()  { if (current>0)      { pause(); current--; remaining=intervals[current]; updateTimerUI(); } }
+function nextInterval()  { if (current<COUNT-1){ pause(); current++; remaining=intervals[current]; updateTimerUI(); } }
+function resetAll() {
+  pause(); current = 0; remaining = intervals[0];
+  document.getElementById('finish-overlay').classList.remove('visible');
+  updateTimerUI();
+}
+function resetToDefault() {
+  intervals = userDefaults.slice();
+  lsSet('cage_intervals', intervals);
+  if (!running) remaining = intervals[current < COUNT ? current : 0];
+  buildEditList(); updateTimerUI();
+}
+
+function showTab(t) {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+  document.querySelectorAll('nav button').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById(t+'-view').classList.add('active');
+  document.querySelectorAll('nav button')[['timer','edit','defaults'].indexOf(t)].classList.add('active');
+  if (t === 'edit')     buildEditList();
+  if (t === 'defaults') buildDefaultsList();
+}
+
+function buildList(listId, data, changeFn, totalId) {
+  var list = document.getElementById(listId);
+  list.innerHTML = '';
+  data.forEach(function(sec, i) {
+    var displayLbl = LABELS[i] ? NOTES[i] : lbl(i);
+    var note = NOTES[i];
+    var m = Math.floor(sec/60);
+    var s = sec % 60;
+    var row = document.createElement('div');
+    row.className = 'edit-row';
+    row.innerHTML =
+      '<div class="edit-num">' + displayLbl + '</div>' +
+      '<div class="edit-sep">|</div>' +
+      '<div class="edit-label">mm:ss</div>' +
+      '<input class="edit-input" type="number" min="0" max="9" value="' + m + '" data-idx="' + i + '" data-part="m">' +
+      '<div class="edit-colon">:</div>' +
+      '<input class="edit-input" type="number" min="0" max="59" value="' + String(s).padStart(2,'0') + '" data-idx="' + i + '" data-part="s">' +
+      (note ? '<div class="edit-note">' + note + '</div>' : '');
+    list.appendChild(row);
+  });
+  list.querySelectorAll('.edit-input').forEach(function(inp) {
+    inp.addEventListener('change', changeFn);
+    inp.addEventListener('blur',   changeFn);
+  });
+  document.getElementById(totalId).textContent = 'Gesamt: ' + fmt(sum(data));
+}
+
+function buildEditList()     { buildList('edit-list',     intervals,    onEditChange,     'edit-total'); }
+function buildDefaultsList() { buildList('defaults-list', userDefaults, onDefaultsChange, 'defaults-total'); }
+
+function readRow(containerId, idx) {
+  var rows = document.querySelectorAll('#' + containerId + ' .edit-row');
+  var row  = rows[idx];
+  var m = parseInt(row.querySelector('[data-part="m"]').value) || 0;
+  var s = parseInt(row.querySelector('[data-part="s"]').value) || 0;
+  return m*60 + s;
+}
+
+function onEditChange(e) {
+  var idx = parseInt(e.target.dataset.idx);
+  intervals[idx] = readRow('edit-list', idx);
+  lsSet('cage_intervals', intervals);
+  if (idx === current && !running) remaining = intervals[current];
+  document.getElementById('edit-total').textContent = 'Gesamt: ' + fmt(sum(intervals));
+  updateTimerUI();
+}
+
+function onDefaultsChange(e) {
+  var idx = parseInt(e.target.dataset.idx);
+  userDefaults[idx] = readRow('defaults-list', idx);
+  document.getElementById('defaults-total').textContent = 'Gesamt: ' + fmt(sum(userDefaults));
+}
+
+function saveDefaults() {
+  lsSet('cage_defaults', userDefaults);
+  showToast('Standardwerte gespeichert');
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  setTimeout(function(){ t.classList.remove('visible'); }, 2200);
+}
+
+updateTimerUI();
+</script>
+</body>
+</html>
