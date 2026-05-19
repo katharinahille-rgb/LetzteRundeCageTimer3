@@ -38,37 +38,14 @@
     gap: 12px;
     flex-shrink: 0;
   }
-  header h1 {
-    font-family: var(--serif);
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-  header span {
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+  header h1 { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--accent); }
+  header span { font-size: 11px; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; }
 
-  nav {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
+  nav { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
   nav button {
-    flex: 1;
-    background: none;
-    border: none;
-    color: var(--text-dim);
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 11px 6px;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
+    flex: 1; background: none; border: none; color: var(--text-dim);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 11px 6px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;
   }
   nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
 
@@ -79,81 +56,57 @@
   #timer-view { align-items: center; justify-content: space-between; }
 
   .interval-info { width: 100%; padding: 20px 24px 0; text-align: center; }
-  .interval-number {
+  .interval-title {
     font-family: var(--serif);
-    font-size: 72px;
+    font-size: 52px;
     line-height: 1;
     color: var(--accent);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
   }
-  .interval-label {
-    font-size: 10px;
-    letter-spacing: 0.15em;
+  .interval-subtitle {
+    font-size: 12px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-dim);
+    margin-top: 6px;
+  }
+  .interval-cue {
+    font-size: 11px;
+    color: var(--text-mid);
     margin-top: 4px;
+    font-style: italic;
+    letter-spacing: 0.04em;
   }
 
-  .time-display { text-align: center; padding: 24px 0 16px; }
+  .time-display { text-align: center; padding: 20px 0 16px; }
   .time-big {
-    font-family: var(--mono);
-    font-size: 80px;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    line-height: 1;
-    transition: color 0.3s;
+    font-family: var(--mono); font-size: 80px; font-weight: 300;
+    letter-spacing: 0.05em; line-height: 1; transition: color 0.3s;
   }
   .time-big.warning { color: var(--danger); }
   .time-big.normal  { color: var(--text); }
 
   .progress-track {
-    width: calc(100% - 48px);
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-    margin: 0 24px;
+    width: calc(100% - 48px); height: 3px; background: var(--border);
+    border-radius: 2px; overflow: hidden; margin: 0 24px;
   }
   .progress-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 2px;
+    height: 100%; background: var(--accent); border-radius: 2px;
     transition: width 0.5s linear, background 0.3s;
   }
   .progress-fill.warning { background: var(--danger); }
 
-  .next-info {
-    font-size: 11px;
-    color: var(--text-dim);
-    text-align: center;
-    padding: 10px 24px 0;
-    letter-spacing: 0.03em;
-  }
+  .next-info { font-size: 11px; color: var(--text-dim); text-align: center; padding: 10px 24px 0; letter-spacing: 0.03em; }
   .next-info strong { color: var(--text-mid); }
 
-  .total-bar {
-    font-size: 10px;
-    color: var(--text-dim);
-    text-align: center;
-    letter-spacing: 0.06em;
-    padding: 0 24px 8px;
-  }
+  .total-bar { font-size: 10px; color: var(--text-dim); text-align: center; letter-spacing: 0.06em; padding: 0 24px 8px; }
 
   .controls { display: flex; gap: 12px; padding: 24px; width: 100%; }
   .btn {
-    flex: 1;
-    padding: 16px 12px;
-    border-radius: var(--radius);
-    border: none;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.15s;
-    -webkit-user-select: none;
-    user-select: none;
+    flex: 1; padding: 16px 12px; border-radius: var(--radius); border: none;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.15s; -webkit-user-select: none; user-select: none;
   }
   .btn:active { transform: scale(0.97); }
   .btn-primary  { background: var(--accent); color: #0e0e0e; font-weight: 700; flex: 2; }
@@ -161,83 +114,42 @@
 
   .nav-row { display: flex; gap: 12px; padding: 0 24px 24px; width: 100%; }
   .btn-nav {
-    flex: 1;
-    padding: 13px 8px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-mid);
-    font-family: var(--mono);
-    font-size: 20px;
-    cursor: pointer;
-    transition: all 0.15s;
+    flex: 1; padding: 13px 8px; border-radius: var(--radius); border: 1px solid var(--border);
+    background: var(--surface); color: var(--text-mid); font-family: var(--mono); font-size: 20px;
+    cursor: pointer; transition: all 0.15s;
   }
   .btn-nav:active  { transform: scale(0.95); background: var(--border); }
   .btn-nav:disabled { opacity: 0.25; cursor: default; }
 
   .edit-header {
-    padding: 14px 16px 10px;
-    font-size: 10px;
-    color: var(--text-dim);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
+    padding: 14px 16px 10px; font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em;
+    text-transform: uppercase; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
   }
   .edit-header-right { display: flex; gap: 12px; align-items: center; }
   .edit-header-total { font-size: 11px; color: var(--text-mid); }
-
   .reset-link {
-    background: none; border: none;
-    font-family: var(--mono);
-    font-size: 10px; color: var(--text-dim);
-    cursor: pointer; letter-spacing: 0.06em;
-    text-decoration: underline;
+    background: none; border: none; font-family: var(--mono); font-size: 10px;
+    color: var(--text-dim); cursor: pointer; letter-spacing: 0.06em; text-decoration: underline;
   }
 
-  .edit-list {
-    padding: 12px 16px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  .edit-list { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 6px; }
   .edit-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px;
   }
   .edit-num {
-    font-family: var(--serif);
-    font-size: 18px;
-    color: var(--accent);
-    width: 56px;
-    flex-shrink: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family: var(--serif); font-size: 15px; color: var(--accent);
+    width: 70px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    line-height: 1.2;
   }
+  .edit-num small { display: block; font-size: 10px; color: var(--text-dim); font-family: var(--mono); }
   .edit-sep  { color: var(--border); flex-shrink: 0; font-size: 18px; }
   .edit-label { font-size: 10px; color: var(--text-dim); letter-spacing: 0.06em; flex-shrink: 0; width: 26px; }
   .edit-input {
-    background: none;
-    border: none;
-    border-bottom: 1px solid var(--border);
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 16px;
-    width: 52px;
-    text-align: center;
-    padding: 2px 4px;
-    outline: none;
-    -webkit-appearance: none;
-    appearance: none;
+    background: none; border: none; border-bottom: 1px solid var(--border); color: var(--text);
+    font-family: var(--mono); font-size: 16px; width: 52px; text-align: center;
+    padding: 2px 4px; outline: none; -webkit-appearance: none; appearance: none;
   }
   .edit-input:focus { border-bottom-color: var(--accent); color: var(--accent); }
   .edit-input[type=number] { -moz-appearance: textfield; }
@@ -249,36 +161,19 @@
   .save-bar { padding: 12px 16px 40px; flex-shrink: 0; }
 
   #finish-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(14,14,14,0.95);
-    z-index: 100;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 32px;
+    display: none; position: fixed; inset: 0; background: rgba(14,14,14,0.95); z-index: 100;
+    flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 32px;
   }
   #finish-overlay.visible { display: flex; }
-  #finish-overlay h2 {
-    font-family: var(--serif);
-    font-size: 32px; color: var(--accent); margin-bottom: 12px;
-  }
-  #finish-overlay p {
-    color: var(--text-dim); font-size: 12px;
-    letter-spacing: 0.06em; margin-bottom: 32px;
-  }
+  #finish-overlay h2 { font-family: var(--serif); font-size: 32px; color: var(--accent); margin-bottom: 12px; }
+  #finish-overlay p { color: var(--text-dim); font-size: 12px; letter-spacing: 0.06em; margin-bottom: 32px; }
 
   .toast {
-    position: fixed;
-    bottom: 24px; left: 50%;
+    position: fixed; bottom: 24px; left: 50%;
     transform: translateX(-50%) translateY(60px);
-    background: var(--accent); color: #0e0e0e;
-    font-size: 11px; letter-spacing: 0.08em;
-    padding: 10px 20px; border-radius: 20px;
-    font-weight: 700;
-    transition: transform 0.3s;
-    z-index: 200; white-space: nowrap;
+    background: var(--accent); color: #0e0e0e; font-size: 11px; letter-spacing: 0.08em;
+    padding: 10px 20px; border-radius: 20px; font-weight: 700;
+    transition: transform 0.3s; z-index: 200; white-space: nowrap;
   }
   .toast.visible { transform: translateX(-50%) translateY(0); }
 </style>
@@ -298,8 +193,9 @@
 
 <div id="timer-view" class="view active">
   <div class="interval-info">
-    <div class="interval-number" id="cur-num">15</div>
-    <div class="interval-label">Intervall</div>
+    <div class="interval-title" id="cur-title">17:15 Uhr</div>
+    <div class="interval-subtitle" id="cur-subtitle">Intervall 15</div>
+    <div class="interval-cue" id="cur-cue"></div>
   </div>
   <div class="time-display">
     <div class="time-big normal" id="time-display">1:10</div>
@@ -350,10 +246,29 @@
 <div class="toast" id="toast">Standardwerte gespeichert</div>
 
 <script>
-var FACTORY = [70,70,70,70,70,70,80,70,90,99,70,60,50,50,0,270,210];
-var NOTES   = ['','','','','','','','','','Musik-Cue','','','','','Abschluss','Ich hab noch nie I','Ich hab noch nie II'];
-var LABELS  = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'IhnI','IhnII'];
-var COUNT   = FACTORY.length;
+// Index: 0=15, 1=14, ..., 14=1, 15=IhnI, 16=IhnII, 17=Kreuzgang
+var FACTORY = [70,70,70,70,70,70,80,70,90,99,70,60,50,50,0,270,210,600];
+
+var TITLES = [
+  '17:15 Uhr','18:14 Uhr','19:13 Uhr','20:12 Uhr','21:11 Uhr',
+  '22:10 Uhr','23:09 Uhr','00:08 Uhr','00:17 Uhr','00:26 Uhr',
+  '01:05 Uhr','01:14 Uhr','01:33 Uhr','02:00 Uhr','Abschluss',
+  'Ich hab noch nie I','Ich hab noch nie II','Kreuzgang'
+];
+
+var SUBTITLES = [
+  'Intervall 15','Intervall 14','Intervall 13','Intervall 12','Intervall 11',
+  'Intervall 10','Intervall 09','Intervall 08','Intervall 07','Intervall 06',
+  'Intervall 05','Intervall 04','Intervall 03','Intervall 02','Intervall 01',
+  'Cue: Gulasch','Cue: Eigene Kneipe','—'
+];
+
+var NOTES = [
+  '','','','','','','','','','Musik-Cue','','','','','Abschluss',
+  'Ich hab noch nie I','Ich hab noch nie II','Kreuzgang'
+];
+
+var COUNT = FACTORY.length;
 
 function lsGet(key, fallback) {
   try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
@@ -369,7 +284,6 @@ var remaining = intervals[0];
 var running   = false;
 var ticker    = null;
 
-function lbl(i) { return LABELS[i] || String(15 - i); }
 function fmt(s) {
   if (s <= 0) return '0:00';
   return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0');
@@ -377,7 +291,9 @@ function fmt(s) {
 function sum(arr) { return arr.reduce(function(a,b){return a+b;},0); }
 
 function updateTimerUI() {
-  document.getElementById('cur-num').textContent = lbl(current);
+  document.getElementById('cur-title').textContent    = TITLES[current];
+  document.getElementById('cur-subtitle').textContent = SUBTITLES[current];
+
   var dur    = intervals[current];
   var timeEl = document.getElementById('time-display');
   var prog   = document.getElementById('progress-fill');
@@ -399,8 +315,8 @@ function updateTimerUI() {
   if (current < COUNT - 1) {
     var nd = intervals[current+1];
     nextEl.innerHTML = nd === 0
-      ? 'Weiter: ' + lbl(current+1) + ' &mdash; <strong>Abschluss</strong>'
-      : 'Weiter: ' + lbl(current+1) + ' &mdash; <strong>' + fmt(nd) + '</strong>';
+      ? 'Weiter: ' + TITLES[current+1] + ' &mdash; <strong>Abschluss</strong>'
+      : 'Weiter: ' + TITLES[current+1] + ' &mdash; <strong>' + fmt(nd) + '</strong>';
   } else {
     nextEl.textContent = 'Letztes Intervall';
   }
@@ -471,20 +387,18 @@ function buildList(listId, data, changeFn, totalId) {
   var list = document.getElementById(listId);
   list.innerHTML = '';
   data.forEach(function(sec, i) {
-    var displayLbl = LABELS[i] ? NOTES[i] : lbl(i);
-    var note = NOTES[i];
     var m = Math.floor(sec/60);
     var s = sec % 60;
     var row = document.createElement('div');
     row.className = 'edit-row';
     row.innerHTML =
-      '<div class="edit-num">' + displayLbl + '</div>' +
+      '<div class="edit-num">' + TITLES[i] + '<small>' + SUBTITLES[i] + '</small></div>' +
       '<div class="edit-sep">|</div>' +
       '<div class="edit-label">mm:ss</div>' +
-      '<input class="edit-input" type="number" min="0" max="9" value="' + m + '" data-idx="' + i + '" data-part="m">' +
+      '<input class="edit-input" type="number" min="0" max="99" value="' + m + '" data-idx="' + i + '" data-part="m">' +
       '<div class="edit-colon">:</div>' +
       '<input class="edit-input" type="number" min="0" max="59" value="' + String(s).padStart(2,'0') + '" data-idx="' + i + '" data-part="s">' +
-      (note ? '<div class="edit-note">' + note + '</div>' : '');
+      (NOTES[i] ? '<div class="edit-note">' + NOTES[i] + '</div>' : '');
     list.appendChild(row);
   });
   list.querySelectorAll('.edit-input').forEach(function(inp) {
